@@ -194,9 +194,9 @@
       <Name>Mono.Addins</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\external\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj">
-      <Project>{EE6ED99F-CB12-4683-B055-D28FC7357A34}</Project>
-      <Name>LibGit2Sharp</Name>
+    <ProjectReference Include="..\..\..\..\external\GitProgressManagement\Microsoft.Alm.GitProcessManagement\Src\Microsoft.Alm.GitProgressManagement.csproj">
+      <Project>{19770407-9D75-4081-B8E7-7F0DA1DBD161}</Project>
+      <Name>Microsoft.Alm.GitProcessManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\external\nrefactory\ICSharpCode.NRefactory\ICSharpCode.NRefactory.csproj">
       <Project>{3B2A5653-EC97-4001-BB9B-D90F1AF2C371}</Project>
@@ -218,35 +218,6 @@
       <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\..\external\libgit-binary\libgit2.license.txt">
-      <Link>libgit2.license.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\..\external\libgit-binary\libssh2.license.txt">
-      <Link>libssh2.license.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Choose>
-    <When Condition=" '$(Configuration)' == 'DebugMac' OR '$(Configuration)' == 'ReleaseMac' ">
-      <ItemGroup>
-        <NativeBinaries Include="..\..\..\..\external\libgit-binary\mac\*.dylib" />
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(Configuration)' == 'DebugWin32' OR '$(Configuration)' == 'ReleaseWin32' ">
-      <ItemGroup>
-        <NativeBinaries Include="..\..\..\..\external\libgit-binary\windows\*.*" />
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Target Name="BeforeBuild">
-    <Exec Command="bash build_libgit2.sh" Condition=" '$(Configuration)' == 'DebugGnome' OR '$(Configuration)' == 'ReleaseGnome' " />
-  </Target>
-  <Target Name="AfterBuild">
-     <ItemGroup Condition=" '$(Configuration)' == 'DebugGnome' OR '$(Configuration)' == 'ReleaseGnome' ">
-       <NativeBinaries Include="..\..\..\..\external\libgit2\build\*.so*" />
-     </ItemGroup>
-     <Copy SourceFiles="@(NativeBinaries)" DestinationFolder="$(OutputPath)\" SkipUnchangedFiles="true" />
-  </Target>
 </Project>
