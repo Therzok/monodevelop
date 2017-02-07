@@ -31,7 +31,7 @@ using MonoDevelop.Projects;
 using System.Linq;
 using MonoDevelop.Ide.ProgressMonitoring;
 using System.Threading;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.VersionControl.Git

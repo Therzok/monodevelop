@@ -1,4 +1,4 @@
-﻿//
+//
 // NtlmSmartSubtransport.cs
 //
 // Author:
@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Net.Http;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using System.IO;
 
 namespace MonoDevelop.VersionControl.Git

@@ -26,7 +26,7 @@
 using System;
 using MonoDevelop.Core;
 using System.Text;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using System.Threading;
 using System.Threading.Tasks;
 

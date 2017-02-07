@@ -24,7 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using MonoDevelop.Components;
 
 namespace MonoDevelop.VersionControl.Git

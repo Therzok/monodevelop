@@ -27,7 +27,7 @@ using Gtk;
 using MonoDevelop.Core;
 using MonoDevelop.Components;
 using MonoDevelop.Ide;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using System.Threading.Tasks;
 
 namespace MonoDevelop.VersionControl.Git

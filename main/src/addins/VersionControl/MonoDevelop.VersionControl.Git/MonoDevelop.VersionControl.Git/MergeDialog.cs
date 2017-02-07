@@ -29,7 +29,7 @@ using Gtk;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Components;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 
 namespace MonoDevelop.VersionControl.Git
 {

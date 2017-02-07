@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using MonoDevelop.Core;
 using System;
 using ProgressMonitor = MonoDevelop.Core.ProgressMonitor;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 
 namespace MonoDevelop.VersionControl.Git
 {

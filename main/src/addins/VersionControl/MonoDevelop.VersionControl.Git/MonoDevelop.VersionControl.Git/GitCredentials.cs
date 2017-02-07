@@ -27,7 +27,7 @@ using System;
 
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using System.IO;
 using System.Collections.Generic;
 using MonoDevelop.Components;

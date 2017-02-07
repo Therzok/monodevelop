@@ -1,4 +1,4 @@
-﻿//
+//
 // ProjectTemplateHandler.cs
 //
 // Author:
@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 
 using System.IO;
-using LibGit2Sharp;
+using Microsoft.Alm.GitProcessManagement;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Core;
