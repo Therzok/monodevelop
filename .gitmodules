@@ -57,3 +57,6 @@
 [submodule "main/external/macdoc"]
 	path = main/external/macdoc
 	url = git://github.com/xamarin/macdoc
+[submodule "main/external/GitProgressManagement"]
+	path = main/external/GitProgressManagement
+	url = git@github.com:Therzok/Git-Process-Management
