@@ -1,10 +1,10 @@
-//
-// Stash.cs
+﻿//
+// CompatExtensions.cs
 //
 // Author:
-//       Lluis Sanchez Gual <lluis@novell.com>
+//       therzok <marius.ungureanu@xamarin.com>
 //
-// Copyright (c) 2010 Novell, Inc (http://www.novell.com)
+// Copyright (c) 2017 (c) Marius Ungureanu
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Microsoft.Alm.GitProcessManagement;
+using Microsoft.Alm.GitProcessManagement.Cli;
 
 namespace MonoDevelop.VersionControl.Git
 {
-	public static class StashCollectionExtensions
+	static class CompatExtensions
 	{
-		internal static void Remove (this StashCollection sc, Stash stash)
+		public static void Stage (this IRepository repo, string path)
 		{
-			int i = 0;
-			foreach (var s in sc) {
-				if (s.FriendlyName == stash.FriendlyName) {
-					sc.Remove (i);
-					break;
-				}
-				++i;
-			}
+			new UpdateIndexCommand (repo).Add (new [] { path }, UpdateOptions.Default);
+		}
+
+		public static void Unstage (this IRepository repo, string path)
+		{
+			new UpdateIndexCommand (repo).Add (new [] { path }, new UpdateOptions { Flags = UpdateOptionFlags.Remove });
+		}
+
+		public static void Remove (this IRepository repo, string path, bool removeFromWorking)
+		{
+			new UpdateIndexCommand (repo).Add (new [] { path }, new UpdateOptions { Flags = UpdateOptionFlags.ForceRemove });
+			if (File.Exists (path))
+				File.Delete (path);
+			else
+				Directory.Delete (path);
 		}
 	}
 }

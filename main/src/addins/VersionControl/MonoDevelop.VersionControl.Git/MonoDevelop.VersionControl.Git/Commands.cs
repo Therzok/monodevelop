@@ -110,8 +110,8 @@ namespace MonoDevelop.VersionControl.Git
 			{
 				string currentBranch = repo.GetCurrentBranch ();
 				foreach (Branch branch in repo.GetBranches ()) {
-					CommandInfo ci = info.Add (branch.FriendlyName, branch.FriendlyName);
-					if (branch.FriendlyName == currentBranch)
+					CommandInfo ci = info.Add (branch.Name, branch.Name);
+					if (branch.Name == currentBranch)
 						ci.Checked = true;
 				}
 			}
@@ -168,7 +168,7 @@ namespace MonoDevelop.VersionControl.Git
 								});
 							}
 
-						} catch (Exception ex) {
+						} catch (System.Exception ex) {
 							MessageService.ShowError (GettextCatalog.GetString ("Stash operation failed"), ex);
 						}
 						finally {
@@ -186,8 +186,11 @@ namespace MonoDevelop.VersionControl.Git
 		protected override void Update (CommandInfo info)
 		{
 			var repo = UpdateVisibility (info);
-			if (repo != null)
-				info.Enabled = !repo.RootRepository.Info.IsHeadUnborn;
+			HeadType headType;
+			if (repo != null) {
+				repo.RootRepository.ReadCurrentBranchName (true, out headType);
+				info.Enabled = headType != HeadType.Unborn;
+			}
 		}
 	}
 
@@ -199,8 +202,9 @@ namespace MonoDevelop.VersionControl.Git
 			var statusTracker = IdeApp.Workspace.GetFileStatusTracker ();
 			ThreadPool.QueueUserWorkItem (delegate {
 				try {
-					GitService.ReportStashResult (Repository.PopStash (monitor, 0));
-				} catch (Exception ex) {
+					Repository.PopStash (monitor, 0);
+					//GitService.ReportStashResult (Repository.PopStash (monitor, 0));
+				} catch (System.Exception ex) {
 					MessageService.ShowError (GettextCatalog.GetString ("Stash operation failed"), ex);
 				}
 				finally {

@@ -5,13 +5,19 @@ namespace MonoDevelop.VersionControl.Git
 	internal partial class GitOptionsPanelWidget
 	{
 		private global::Gtk.VBox vbox2;
+
 		private global::Gtk.CheckButton checkStashBranch;
+
 		private global::Gtk.Label label1;
+
 		private global::Gtk.Alignment alignment1;
+
 		private global::Gtk.VBox vbox3;
+
 		private global::Gtk.CheckButton checkRebase;
+
 		private global::Gtk.CheckButton checkStashUpdate;
-		
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

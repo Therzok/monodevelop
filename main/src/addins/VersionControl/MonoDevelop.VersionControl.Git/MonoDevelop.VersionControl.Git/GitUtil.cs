@@ -34,42 +34,41 @@ namespace MonoDevelop.VersionControl.Git
 {
 	static class GitUtil
 	{
-		public static string ToGitPath (this LibGit2Sharp.Repository repo, FilePath filePath)
+		public static string ToGitPath (this Microsoft.Alm.GitProcessManagement.IRepository repo, FilePath filePath)
 		{
-			return filePath.FullPath.ToRelative (repo.Info.WorkingDirectory).ToString ().Replace ('\\', '/');
+			return filePath.FullPath.ToRelative (repo.WorkingDirectory).ToString ().Replace ('\\', '/');
 		}
 
-		public static IEnumerable<string> ToGitPath (this LibGit2Sharp.Repository repo, IEnumerable<FilePath> filePaths)
+		public static IEnumerable<string> ToGitPath (this Microsoft.Alm.GitProcessManagement.IRepository repo, IEnumerable<FilePath> filePaths)
 		{
 			foreach (var p in filePaths)
 				yield return ToGitPath (repo, p);
 		}
 
-		public static FilePath FromGitPath (this LibGit2Sharp.Repository repo, string filePath)
+		public static FilePath FromGitPath (this Microsoft.Alm.GitProcessManagement.IRepository repo, string filePath)
 		{
 			filePath = filePath.Replace ('/', Path.DirectorySeparatorChar);
-			return Path.Combine (repo.Info.WorkingDirectory, filePath);
+			return Path.Combine (repo.WorkingDirectory, filePath);
 		}
 
 		/// <summary>
 		/// Compares two commits and returns a list of files that have changed
 		/// </summary>
-		public static TreeChanges CompareCommits (LibGit2Sharp.Repository repo, Commit reference, Commit compared)
+		public static ITreeDifference CompareCommits (Microsoft.Alm.GitProcessManagement.IRepository repo, ICommit reference, ICommit compared)
 		{
-			return repo.Diff.Compare<TreeChanges> (reference != null ? reference.Tree : null, compared != null ? compared.Tree : null);
+			return repo.ReadTreeDifference (reference, compared, DifferenceOptions.Default);
 		}
 
-		public static TreeChanges GetChangedFiles (LibGit2Sharp.Repository repo, string refRev)
+		public static ITreeDifference GetChangedFiles (Microsoft.Alm.GitProcessManagement.IRepository repo, string refRev)
 		{
-			return GitUtil.CompareCommits (repo, repo.Lookup<Commit> (refRev), repo.Head.Tip);
+			return GitUtil.CompareCommits (repo, repo.ReadObject<ICommit> (ObjectId.FromString (refRev, 0)), repo.Head.Commit);
 		}
 
-		public static LibGit2Sharp.Repository Init (string targetLocalPath, string url)
+		public static Microsoft.Alm.GitProcessManagement.IRepository Init (string targetLocalPath, string url)
 		{
-			var path = LibGit2Sharp.Repository.Init (targetLocalPath);
-			var repo = new LibGit2Sharp.Repository (path);
+			var repo = Microsoft.Alm.GitProcessManagement.Repository.Create (targetLocalPath, InitializationOptions.Default);
 			if (!string.IsNullOrEmpty (url))
-				repo.Network.Remotes.Add ("origin", url);
+				repo.AddRemote (url, "origin", RemoteTagOptions.AllTags);
 			return repo;
 		}
 	}

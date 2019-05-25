@@ -117,7 +117,7 @@ namespace MonoDevelop.VersionControl.Git
 			store.Clear ();
 
 			foreach (Branch b in repo.GetBranches ())
-				store.AppendValues (b.FriendlyName, ImageService.GetIcon ("vc-branch", IconSize.Menu), b.FriendlyName, "branch");
+				store.AppendValues (b.Name, ImageService.GetIcon ("vc-branch", IconSize.Menu), b.Name, "branch");
 
 			foreach (string t in repo.GetTags ())
 				store.AppendValues (t, ImageService.GetIcon ("vc-tag", IconSize.Menu), t, "tag");

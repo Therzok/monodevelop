@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Microsoft.Alm.GitProcessManagement;
 using MonoDevelop.Core;
 using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.VersionControl;
@@ -48,12 +49,12 @@ namespace MonoDevelop.VersionControl.Git.Tests
 			Directory.CreateDirectory (RemotePath.FullPath + "repo.git");
 			RemoteUrl = "file://" + (Platform.IsWindows ? "/" : "") + RemotePath.FullPath + "repo.git";
 
-			LibGit2Sharp.Repository.Init (RemotePath.FullPath + "repo.git", true);
+			Microsoft.Alm.GitProcessManagement.Repository.Create (RemotePath.FullPath + "repo.git", new InitializationOptions (bare: true));
 
 			// Check out the repository.
 			Checkout (LocalPath, RemoteUrl);
 			Repo = GetRepo (LocalPath, RemoteUrl);
-			((GitRepository)Repo).RootRepository.Config.Set ("core.ignorecase", false);
+			((GitRepository)Repo).RootRepository.SetConfigValue ("core.ignorecase", "false", ConfigLevel.Local);
 			ModifyPath (Repo, ref LocalPath);
 			DotDir = ".git";
 
@@ -89,9 +90,9 @@ namespace MonoDevelop.VersionControl.Git.Tests
 		protected override void ModifyPath (Repository repo, ref FilePath old)
 		{
 			var repo2 = (GitRepository)repo;
-			old = repo2.RootRepository.Info.WorkingDirectory;
-			repo2.RootRepository.Config.Set<string> ("user.name", Author);
-			repo2.RootRepository.Config.Set<string> ("user.email", Email);
+			old = repo2.RootRepository.WorkingDirectory;
+			repo2.RootRepository.SetConfigValue ("user.name", Author, ConfigLevel.Local);
+			repo2.RootRepository.SetConfigValue ("user.email", Email, ConfigLevel.Local);
 		}
 
 		protected override void CheckLog (Repository repo)
@@ -118,7 +119,7 @@ namespace MonoDevelop.VersionControl.Git.Tests
 		protected override Revision GetHeadRevision ()
 		{
 			var repo2 = (GitRepository)Repo;
-			return new GitRevision (Repo, repo2.RootRepository, repo2.RootRepository.Head.Tip);
+			return new GitRevision (Repo, repo2.RootRepository, repo2.RootRepository.Head.Commit);
 		}
 
 		protected override void PostCommit (Repository repo)
@@ -140,7 +141,7 @@ namespace MonoDevelop.VersionControl.Git.Tests
 		[Test]
 		public void TestGitStash ()
 		{
-			LibGit2Sharp.Stash stash;
+			Stash stash;
 			var repo2 = (GitRepository)Repo;
 			AddFile ("file2", "nothing", true, true);
 			AddFile ("file1", "text", true, false);
@@ -167,7 +168,7 @@ namespace MonoDevelop.VersionControl.Git.Tests
 		[Test]
 		public void TestStashNoExtraCommit ()
 		{
-			LibGit2Sharp.Stash stash;
+			Stash stash;
 			var repo2 = (GitRepository)Repo;
 			AddFile ("file1", null, true, true);
 			AddFile ("file2", null, true, false);
@@ -201,8 +202,8 @@ namespace MonoDevelop.VersionControl.Git.Tests
 
 			repo2.SwitchToBranch (new ProgressMonitor (), "branch1");
 			// Nothing could be stashed for master. Branch1 should be popped in any case if it exists.
-			Assert.IsFalse (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("master")));
-			Assert.IsFalse (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("branch1")));
+			Assert.IsFalse (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("master")));
+			Assert.IsFalse (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("branch1")));
 
 			Assert.AreEqual ("branch1", repo2.GetCurrentBranch ());
 			Assert.IsTrue (File.Exists (LocalPath + "file1"), "Branch not inheriting from current.");
@@ -212,23 +213,23 @@ namespace MonoDevelop.VersionControl.Git.Tests
 
 			repo2.SwitchToBranch (new ProgressMonitor (), "branch2");
 			// Branch1 has a stash created and assert clean workdir. Branch2 should be popped in any case.
-			Assert.IsTrue (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("branch1")));
-			Assert.IsFalse (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("branch2")));
+			Assert.IsTrue (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("branch1")));
+			Assert.IsFalse (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("branch2")));
 			Assert.IsTrue (!File.Exists (LocalPath + "file2"), "Uncommitted changes were not stashed");
 
 			AddFile ("file2", "text", true, false);
 			repo2.SwitchToBranch (new ProgressMonitor (), "branch1");
 			// Branch2 has a stash created. Branch1 should be popped with file2 reinstated.
-			Assert.True (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("branch2")));
-			Assert.IsFalse (repo2.GetStashes ().Any (s => s.Message == GetStashMessageForBranch ("branch1")));
+			Assert.True (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("branch2")));
+			Assert.IsFalse (repo2.GetStashes ().Cast<Stash> ().Any (s => s.StashMessage == GetStashMessageForBranch ("branch1")));
 			Assert.IsTrue (File.Exists (LocalPath + "file2"), "Uncommitted changes were not stashed correctly");
 
 			repo2.SwitchToBranch (new ProgressMonitor (), "master");
 			repo2.RemoveBranch ("branch1");
-			Assert.IsFalse (repo2.GetBranches ().Any (b => b.FriendlyName == "branch1"), "Failed to delete branch");
+			Assert.IsFalse (repo2.GetBranches ().Cast<Stash> ().Any (b => b.Name == "branch1"), "Failed to delete branch");
 
 			repo2.RenameBranch ("branch2", "branch3");
-			Assert.IsTrue (repo2.GetBranches ().Any (b => b.FriendlyName == "branch3") && repo2.GetBranches ().All (b => b.FriendlyName != "branch2"), "Failed to rename branch");
+			Assert.IsTrue (repo2.GetBranches ().Cast<Stash> ().Any (b => b.Name == "branch3") && repo2.GetBranches ().All (b => b.Name != "branch2"), "Failed to rename branch");
 
 			// TODO: Add CreateBranchFromCommit tests.
 		}
@@ -452,7 +453,7 @@ namespace MonoDevelop.VersionControl.Git.Tests
 
 		[TestCase(null, "origin/master", "refs/remotes/origin/master")]
 		[TestCase(null, "master", "refs/heads/master")]
-		[TestCase(typeof(LibGit2Sharp.NotFoundException), "noremote/master", "refs/remotes/noremote/master")]
+		[TestCase(typeof(System.Exception), "noremote/master", "refs/remotes/noremote/master")]
 		[TestCase(typeof(ArgumentException), "origin/master", "refs/remote/origin/master")]
 		// Tests bug #30347
 		public void CreateBranchWithRemoteSource (Type exceptionType, string trackSource, string trackRef)
@@ -466,7 +467,7 @@ namespace MonoDevelop.VersionControl.Git.Tests
 				Assert.Throws (exceptionType, () => repo2.CreateBranch ("testBranch2", trackSource, trackRef));
 			else {
 				repo2.CreateBranch ("testBranch2", trackSource, trackRef);
-				Assert.True (repo2.GetBranches ().Any (b => b.FriendlyName == "testBranch2" && b.TrackedBranch.FriendlyName == trackSource));
+				Assert.True (repo2.GetBranches ().Any (b => b.Name == "testBranch2" && b.PushTargetName == trackSource));
 			}
 		}
 
@@ -478,14 +479,14 @@ namespace MonoDevelop.VersionControl.Git.Tests
 
 			repo2.SetBranchTrackRef ("testBranch", "origin/master", "refs/remotes/origin/master");
 			Assert.True (repo2.GetBranches ().Any (
-				b => b.FriendlyName == "testBranch" &&
-				b.TrackedBranch == repo2.GetBranches ().Single (rb => rb.FriendlyName == "origin/master")
+				b => b.Name == "testBranch" &&
+				b.PushTargetName == repo2.GetBranches ().Single (rb => rb.CanonicalName == "origin/master").Name
 			));
 
 			repo2.SetBranchTrackRef ("testBranch", null, null);
 			Assert.True (repo2.GetBranches ().Any (
-				b => b.FriendlyName == "testBranch" &&
-				b.TrackedBranch == null)
+				b => b.Name == "testBranch" &&
+				b.PushTargetName == null)
 			);
 		}
 

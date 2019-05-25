@@ -11,7 +11,7 @@
     <AssemblyName>MonoDevelop.VersionControl.Git.Tests</AssemblyName>
     <TestRunnerCommand>..\..\..\..\build\bin\mdtool.exe</TestRunnerCommand>
     <TestRunnerArgs>run-md-tests</TestRunnerArgs>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,9 +125,9 @@
       <Project>{D12F0F7B-8DE3-43EC-BA49-41052D065A9B}</Project>
       <Name>GuiUnit_NET_4_5</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\external\libgit2sharp\LibGit2Sharp\LibGit2Sharp.csproj">
-      <Project>{EE6ED99F-CB12-4683-B055-D28FC7357A34}</Project>
-      <Name>LibGit2Sharp</Name>
+    <ProjectReference Include="..\..\..\..\external\GitProgressManagement\Microsoft.Alm.GitProcessManagement\Src\Microsoft.Alm.GitProcessManagement.csproj">
+      <Project>{19770407-9D75-4081-B8E7-7F0DA1DBD161}</Project>
+      <Name>Microsoft.Alm.GitProcessManagement</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -68,7 +68,7 @@ namespace MonoDevelop.VersionControl.Git
 			TypeDescriptor.AddAttributes (comboStore, modelAttr);
 
 			foreach (Branch b in repo.GetBranches ()) {
-				AddValues (b.FriendlyName, ImageService.GetIcon ("vc-branch", IconSize.Menu), "refs/heads/");
+				AddValues (b.LocalName, ImageService.GetIcon ("vc-branch", IconSize.Menu), "refs/heads/");
 			}
 
 			foreach (Remote r in repo.GetRemotes ()) {
@@ -119,11 +119,11 @@ namespace MonoDevelop.VersionControl.Git
 		{
 			comboSources.Sensitive = checkTrack.Active;
 			buttonOk.Sensitive = entryName.Text.Length > 0;
-			if (oldName != entryName.Text && repo.GetBranches ().Any (b => b.FriendlyName == entryName.Text)) {
+			if (oldName != entryName.Text && repo.GetBranches ().Any (b => b.LocalName == entryName.Text)) {
 				labelError.Markup = "<span color='" + Ide.Gui.Styles.ErrorForegroundColor.ToHexString (false) + "'>" + GettextCatalog.GetString ("A branch with this name already exists") + "</span>";
 				labelError.Show ();
 				buttonOk.Sensitive = false;
-			} else if (!Reference.IsValidName ("refs/" + entryName.Text)) {
+			} else if (!Reference.IsLegalName ("refs/" + entryName.Text)) {
 				labelError.Markup = "<span color='" + Ide.Gui.Styles.ErrorForegroundColor.ToHexString (false) + "'>" + GettextCatalog.GetString (@"A branch name can not:
 Start with '.' or end with '/' or '.lock'
 Contain a ' ', '..', '~', '^', ':', '\', '?', '['") + "</span>";

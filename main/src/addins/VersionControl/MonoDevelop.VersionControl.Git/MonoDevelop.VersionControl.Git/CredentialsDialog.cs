@@ -34,72 +34,73 @@ namespace MonoDevelop.VersionControl.Git
 {
 	partial class CredentialsDialog : Gtk.Dialog
 	{
-		uint r;
-		public CredentialsDialog (string uri, SupportedCredentialTypes type, Credentials cred)
-		{
-			this.Build ();
+		
+	//	uint r;
+	//	public CredentialsDialog (string uri, SupportedCredentialTypes type, Credentials cred)
+	//	{
+	//		this.Build ();
 
-			this.UseNativeContextMenus ();
+	//		this.UseNativeContextMenus ();
 
-			labelTop1.LabelProp = string.Format (labelTop1.LabelProp, uri);
+	//		labelTop1.LabelProp = string.Format (labelTop1.LabelProp, uri);
 
-			var table = new Table (0, 0, false);
-			table.ColumnSpacing = 6;
-			vbox.PackStart (table, true, true, 0);
+	//		var table = new Table (0, 0, false);
+	//		table.ColumnSpacing = 6;
+	//		vbox.PackStart (table, true, true, 0);
 
-			Widget firstEditor = null;
-			switch (type) {
-			case SupportedCredentialTypes.UsernamePassword:
-				upcred = (UsernamePasswordCredentials)cred;
-				firstEditor = CreateEntry (table, GettextCatalog.GetString ("Username:"), false);
-				CreateEntry (table, GettextCatalog.GetString ("Password:"), true);
-				break;
-			case SupportedCredentialTypes.Ssh:
-				sshcred = (SshUserKeyCredentials)cred;
-				firstEditor = CreateEntry (table, GettextCatalog.GetString ("Passphrase:"), true);
-				break;
-			}
-			table.ShowAll ();
-			Focus = firstEditor;
-			Default = buttonOk;
-		}
+	//		/*Widget firstEditor = null;
+	//		switch (type) {
+	//		case SupportedCredentialTypes.UsernamePassword:
+	//			upcred = (UsernamePasswordCredentials)cred;
+	//			firstEditor = CreateEntry (table, GettextCatalog.GetString ("Username:"), false);
+	//			CreateEntry (table, GettextCatalog.GetString ("Password:"), true);
+	//			break;
+	//		case SupportedCredentialTypes.Ssh:
+	//			sshcred = (SshUserKeyCredentials)cred;
+	//			firstEditor = CreateEntry (table, GettextCatalog.GetString ("Passphrase:"), true);
+	//			break;
+	//		}*/
+	//		table.ShowAll ();
+	//		//Focus = firstEditor;
+	//		Default = buttonOk;
+	//	}
 
-		Widget CreateEntry (Table table, string text, bool password)
-		{
-			var lab = new Label (text);
-			lab.Xalign = 0;
-			table.Attach (lab, 0, 1, r, r + 1);
-			var tc = (Table.TableChild)table [lab];
-			tc.XOptions = AttachOptions.Shrink;
+	//	Widget CreateEntry (Table table, string text, bool password)
+	//	{
+	//		var lab = new Label (text);
+	//		lab.Xalign = 0;
+	//		table.Attach (lab, 0, 1, r, r + 1);
+	//		var tc = (Table.TableChild)table [lab];
+	//		tc.XOptions = AttachOptions.Shrink;
 
-			var e = new Entry ();
-			Widget editor = e;
-			e.ActivatesDefault = true;
-			if (password)
-				e.Visibility = false;
+	//		var e = new Entry ();
+	//		Widget editor = e;
+	//		e.ActivatesDefault = true;
+	//		if (password)
+	//			e.Visibility = false;
 
-			e.Changed += delegate {
-				if (password) {
-					if (upcred != null)
-						upcred.Password = e.Text ?? "";
-					else
-						sshcred.Passphrase = e.Text ?? "";
-				} else {
-					if (upcred != null)
-						upcred.Username = e.Text;
-				}
-			};
+	//		e.Changed += delegate {
+	//			/*if (password) {
+	//				if (upcred != null)
+	//					upcred.Password = e.Text ?? "";
+	//				else
+	//					sshcred.Passphrase = e.Text ?? "";
+	//			} else {
+	//				if (upcred != null)
+	//					upcred.Username = e.Text;
+	//			}*/
+	//		};
 
-			if (editor != null) {
-				table.Attach (editor, 1, 2, r, r + 1);
-				tc = (Table.TableChild)table [lab];
-				tc.XOptions = AttachOptions.Fill;
-			}
-			r++;
-			return editor;
-		}
+	//		if (editor != null) {
+	//			table.Attach (editor, 1, 2, r, r + 1);
+	//			tc = (Table.TableChild)table [lab];
+	//			tc.XOptions = AttachOptions.Fill;
+	//		}
+	//		r++;
+	//		return editor;
+	//	}
 
-		readonly UsernamePasswordCredentials upcred;
-		readonly SshUserKeyCredentials sshcred;
+	//	//readonly UsernamePasswordCredentials upcred;
+	//	//readonly SshUserKeyCredentials sshcred;
 	}
 }

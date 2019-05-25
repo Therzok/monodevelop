@@ -29,6 +29,10 @@ namespace MonoDevelop.VersionControl
 {
 	public class VersionControlException : Exception
 	{
+		public VersionControlException (string format, params object[] par) : base (string.Format (format, par))
+		{
+		}
+
 		public VersionControlException (string message) : base (message)
 		{
 		}

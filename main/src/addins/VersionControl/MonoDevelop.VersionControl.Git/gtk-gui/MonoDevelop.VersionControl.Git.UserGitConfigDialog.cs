@@ -5,25 +5,25 @@ namespace MonoDevelop.VersionControl.Git
 	internal partial class UserGitConfigDialog
 	{
 		private global::Gtk.VBox vbox2;
-		
+
 		private global::Gtk.HBox hbox5;
-		
+
 		private global::Gtk.Label label1;
-		
+
 		private global::Gtk.Alignment alignment8;
-		
+
 		private global::Gtk.Entry usernameEntry;
-		
+
 		private global::Gtk.HBox hbox6;
-		
+
 		private global::Gtk.Label label2;
-		
+
 		private global::Gtk.Alignment alignment7;
-		
+
 		private global::Gtk.Entry emailEntry;
-		
+
 		private global::Gtk.Button buttonCancel;
-		
+
 		private global::Gtk.Button buttonOk;
 
 		protected virtual void Build ()

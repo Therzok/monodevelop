@@ -43,7 +43,7 @@ namespace MonoDevelop.VersionControl.Git
 
 		public static void Push (GitRepository repo)
 		{
-			bool hasCommits = repo.RootRepository.Commits.Any ();
+			bool hasCommits = repo.RootRepository.HasCommits ();
 			if (!hasCommits) {
 				MessageService.ShowMessage (
 					GettextCatalog.GetString ("There are no changes to push."),
@@ -64,7 +64,7 @@ namespace MonoDevelop.VersionControl.Git
 				ThreadPool.QueueUserWorkItem (delegate {
 					try {
 						repo.Push (monitor, remote, branch);
-					} catch (Exception ex) {
+					} catch (System.Exception ex) {
 						monitor.ReportError (ex.Message, ex);
 					} finally {
 						monitor.Dispose ();
@@ -98,7 +98,7 @@ namespace MonoDevelop.VersionControl.Git
 						using (ProgressMonitor monitor = VersionControlService.GetProgressMonitor (GettextCatalog.GetString ("Merging branch '{0}'...", dlg.SelectedBranch))) {
 							if (dlg.IsRemote)
 								repo.Fetch (monitor, dlg.RemoteName);
-							repo.Merge (dlg.SelectedBranch, dlg.StageChanges ? GitUpdateOptions.SaveLocalChanges : GitUpdateOptions.None, monitor, FastForwardStrategy.NoFastForward);
+							repo.Merge (dlg.SelectedBranch, dlg.StageChanges ? GitUpdateOptions.SaveLocalChanges : GitUpdateOptions.None, monitor, MergeOptionFastForwardFlags.NoFastForward);
 						}
 					}
 				}
@@ -123,7 +123,7 @@ namespace MonoDevelop.VersionControl.Git
 				var t = await Task.Run (delegate {
 					try {
 						return repo.SwitchToBranch (monitor, branch);
-					} catch (Exception ex) {
+					} catch (System.Exception ex) {
 						monitor.ReportError (GettextCatalog.GetString ("Branch switch failed"), ex);
 						return false;
 					} finally {
@@ -143,10 +143,11 @@ namespace MonoDevelop.VersionControl.Git
 			var statusTracker = IdeApp.Workspace.GetFileStatusTracker ();
 			var t = Task.Run (delegate {
 				try {
-					var res = repo.ApplyStash (monitor, s);
-					ReportStashResult (res);
+					repo.ApplyStash (monitor, s);
+//					var res = repo.ApplyStash (monitor, s);
+//					ReportStashResult (res);
 					return true;
-				} catch (Exception ex) {
+				} catch (System.Exception ex) {
 					string msg = GettextCatalog.GetString ("Stash operation failed.");
 					monitor.ReportError (msg, ex);
 					return false;
@@ -159,7 +160,7 @@ namespace MonoDevelop.VersionControl.Git
 			return t;
 		}
 
-		public static void ReportStashResult (StashApplyStatus status)
+		/*public static void ReportStashResult (StashApplyStatus status)
 		{
 			if (status == StashApplyStatus.Conflicts) {
 				string msg = GettextCatalog.GetString ("Stash applied with conflicts");
@@ -173,6 +174,6 @@ namespace MonoDevelop.VersionControl.Git
 					IdeApp.Workbench.StatusBar.ShowMessage (msg);
 				});
 			}
-		}
+		}*/
 	}
 }

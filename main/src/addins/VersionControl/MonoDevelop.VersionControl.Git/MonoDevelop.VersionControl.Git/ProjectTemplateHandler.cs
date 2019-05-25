@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 
 using System.IO;
-using Microsoft.Alm.GitProcessManagement;
+using Microsoft.Alm.GitProcessManagement.Cli;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Core;
@@ -62,8 +62,9 @@ namespace MonoDevelop.VersionControl.Git
 
 		void CreateGitRepository (FilePath solutionPath)
 		{
-			using (var repo = GitUtil.Init (solutionPath, null))
-				repo.Stage ("*");
+			using (var repo = GitUtil.Init (solutionPath, null)) {
+				new UpdateIndexCommand (repo).Add (new LsFilesCommand (repo).GetCanonicalPaths (repo.WorkingDirectory), Microsoft.Alm.GitProcessManagement.UpdateOptions.Default);
+			}
 		}
 	}
 }

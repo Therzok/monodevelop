@@ -5,15 +5,23 @@ namespace MonoDevelop.VersionControl.Git
 	internal partial class PushDialog
 	{
 		private global::Gtk.VBox vbox2;
+
 		private global::Gtk.HBox hbox1;
+
 		private global::Gtk.Label label1;
+
 		private global::Gtk.ComboBox remoteCombo;
+
 		private global::Gtk.Label label2;
+
 		private global::Gtk.ComboBox branchCombo;
+
 		private global::MonoDevelop.VersionControl.Views.ChangeSetView changeList;
+
 		private global::Gtk.Button buttonCancel;
+
 		private global::Gtk.Button buttonOk;
-		
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

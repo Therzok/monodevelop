@@ -433,7 +433,6 @@
   <widget class="Gtk.Dialog" id="MonoDevelop.VersionControl.Git.GitConfigurationDialog" design-size="602 410">
     <property name="MemberName" />
     <property name="Visible">False</property>
-    <property name="GeneratePublic">False</property>
     <property name="Title" translatable="yes">Git Repository Configuration</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">1</property>
@@ -870,7 +869,6 @@
   <widget class="Gtk.Dialog" id="MonoDevelop.VersionControl.Git.EditBranchDialog" design-size="400 200">
     <property name="MemberName" />
     <property name="Visible">False</property>
-    <property name="GeneratePublic">False</property>
     <property name="Title" translatable="yes">Branch Properties</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -1053,7 +1051,6 @@
   <widget class="Gtk.Dialog" id="MonoDevelop.VersionControl.Git.EditRemoteDialog" design-size="422 206">
     <property name="MemberName" />
     <property name="Visible">False</property>
-    <property name="GeneratePublic">False</property>
     <property name="Title" translatable="yes">Remote Source</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -1407,7 +1404,6 @@
   </widget>
   <widget class="Gtk.Dialog" id="MonoDevelop.VersionControl.Git.CredentialsDialog" design-size="500 132">
     <property name="MemberName" />
-    <property name="GeneratePublic">False</property>
     <property name="Title" translatable="yes">Git Credentials</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -1599,7 +1595,6 @@
   </widget>
   <widget class="Gtk.Dialog" id="MonoDevelop.VersionControl.Git.StashManagerDialog" design-size="575 367">
     <property name="MemberName" />
-    <property name="GeneratePublic">False</property>
     <property name="Title" translatable="yes">Stash Manager</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">1</property>

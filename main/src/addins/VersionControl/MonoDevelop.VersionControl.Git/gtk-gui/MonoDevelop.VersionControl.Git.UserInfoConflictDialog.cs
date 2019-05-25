@@ -5,18 +5,29 @@ namespace MonoDevelop.VersionControl.Git
 	internal partial class UserInfoConflictDialog
 	{
 		private global::Gtk.VBox vbox2;
+
 		private global::Gtk.Label label1;
+
 		private global::Gtk.RadioButton radioMD;
+
 		private global::Gtk.Alignment alignment1;
+
 		private global::Gtk.Label labelMD;
+
 		private global::Gtk.Alignment alignment3;
+
 		private global::Gtk.Label label6;
+
 		private global::Gtk.RadioButton radiobutton2;
+
 		private global::Gtk.Alignment alignment2;
+
 		private global::Gtk.Label labelGit;
+
 		private global::Gtk.Button buttonCancel;
+
 		private global::Gtk.Button buttonOk;
-		
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

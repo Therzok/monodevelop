@@ -45,7 +45,7 @@ namespace MonoDevelop.VersionControl.Git
 
 			if (remote != null) {
 				entryName.Text = remote.Name;
-				entryUrl.Text = remote.Url ?? "";
+				entryUrl.Text = remote.FetchUrl ?? "";
 				entryPushUrl.Text = remote.PushUrl ?? "";
 			}
 

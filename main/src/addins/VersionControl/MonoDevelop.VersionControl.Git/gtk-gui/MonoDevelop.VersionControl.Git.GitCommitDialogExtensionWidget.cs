@@ -5,15 +5,23 @@ namespace MonoDevelop.VersionControl.Git
 	internal partial class GitCommitDialogExtensionWidget
 	{
 		private global::Gtk.VBox vbox1;
+
 		private global::Gtk.CheckButton checkPush;
+
 		private global::Gtk.CheckButton checkAuthor;
+
 		private global::Gtk.Alignment authorBox;
+
 		private global::Gtk.Table table1;
+
 		private global::Gtk.Entry entryEmail;
+
 		private global::Gtk.Entry entryName;
+
 		private global::Gtk.Label labelMail;
+
 		private global::Gtk.Label labelName;
-		
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

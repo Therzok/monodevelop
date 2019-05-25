@@ -72,8 +72,8 @@ namespace MonoDevelop.VersionControl.Git
 
 				string currentBranch = repo.GetCurrentBranch ();
 				var b = (Branch) storeBranches.GetValue (it, 0);
-				buttonRemoveBranch.Sensitive = b.FriendlyName != currentBranch;
-				buttonSetDefaultBranch.Sensitive = !b.IsCurrentRepositoryHead;
+				buttonRemoveBranch.Sensitive = b.LocalName != currentBranch;
+				buttonSetDefaultBranch.Sensitive = !b.IsHead;
 			};
 			buttonRemoveBranch.Sensitive = buttonEditBranch.Sensitive = buttonSetDefaultBranch.Sensitive = false;
 
@@ -135,8 +135,8 @@ namespace MonoDevelop.VersionControl.Git
 			storeBranches.Clear ();
 			string currentBranch = repo.GetCurrentBranch ();
 			foreach (Branch branch in repo.GetBranches ()) {
-				string text = branch.FriendlyName == currentBranch ? "<b>" + branch.FriendlyName + "</b>" : branch.FriendlyName;
-				storeBranches.AppendValues (branch, text, branch.IsTracking ? branch.TrackedBranch.FriendlyName : String.Empty, branch.FriendlyName);
+				string text = branch.LocalName == currentBranch ? "<b>" + branch.LocalName + "</b>" : branch.LocalName;
+				storeBranches.AppendValues (branch, text, branch.PushTarget?.LocalName ?? string.Empty);
 			}
 			state.Load ();
 		}
@@ -150,7 +150,7 @@ namespace MonoDevelop.VersionControl.Git
 			foreach (Remote remote in repo.GetRemotes ()) {
 				// Take into account fetch/push ref specs.
 				string text = remote.Name == currentRemote ? "<b>" + remote.Name + "</b>" : remote.Name;
-				string url = remote.Url;
+				string url = remote.FetchUrl;
 				TreeIter it = storeRemotes.AppendValues (remote, text, url, null, remote.Name);
 				foreach (string branch in repo.GetRemoteBranches (remote.Name))
 					storeRemotes.AppendValues (it, null, branch, null, branch, remote.Name + "/" + branch);
@@ -186,13 +186,13 @@ namespace MonoDevelop.VersionControl.Git
 			if (!listBranches.Selection.GetSelected (out it))
 				return;
 			var b = (Branch) storeBranches.GetValue (it, 0);
-			var dlg = new EditBranchDialog (repo, b.FriendlyName, b.IsTracking ? b.TrackedBranch.FriendlyName : String.Empty);
+			var dlg = new EditBranchDialog (repo, b.LocalName, b.PushTarget?.LocalName ?? string.Empty);
 			try {
 				if (MessageService.RunCustomDialog (dlg) == (int) ResponseType.Ok) {
-					if (dlg.BranchName != b.FriendlyName) {
+					if (dlg.BranchName != b.LocalName) {
 						try {
-							repo.RenameBranch (b.FriendlyName, dlg.BranchName);
-						} catch (Exception ex) {
+							repo.RenameBranch (b.LocalName, dlg.BranchName);
+						} catch (System.Exception ex) {
 							MessageService.ShowError (GettextCatalog.GetString ("The branch could not be renamed"), ex);
 						}
 					}
@@ -212,13 +212,13 @@ namespace MonoDevelop.VersionControl.Git
 				return;
 			var b = (Branch) storeBranches.GetValue (it, 0);
 			string txt = null;
-			if (!repo.IsBranchMerged (b.FriendlyName))
+			if (!repo.IsBranchMerged (b.LocalName))
 				txt = GettextCatalog.GetString ("WARNING: The branch has not yet been merged to HEAD");
-			if (MessageService.Confirm (GettextCatalog.GetString ("Are you sure you want to delete the branch '{0}'?", b.FriendlyName), txt, AlertButton.Delete)) {
+			if (MessageService.Confirm (GettextCatalog.GetString ("Are you sure you want to delete the branch '{0}'?", b.Name), txt, AlertButton.Delete)) {
 				try {
-					repo.RemoveBranch (b.FriendlyName);
+					repo.RemoveBranch (b.LocalName);
 					FillBranches ();
-				} catch (Exception ex) {
+				} catch (System.Exception ex) {
 					MessageService.ShowError (GettextCatalog.GetString ("The branch could not be deleted"), ex);
 				}
 			}
@@ -230,7 +230,7 @@ namespace MonoDevelop.VersionControl.Git
 			if (!listBranches.Selection.GetSelected (out it))
 				return;
 			var b = (Branch) storeBranches.GetValue (it, 0);
-			if (await GitService.SwitchToBranch (repo, b.FriendlyName))
+			if (await GitService.SwitchToBranch (repo, b.LocalName))
 				FillBranches ();
 		}
 
@@ -261,7 +261,7 @@ namespace MonoDevelop.VersionControl.Git
 			var dlg = new EditRemoteDialog (remote);
 			try {
 				if (MessageService.RunCustomDialog (dlg) == (int) ResponseType.Ok) {
-					if (remote.Url != dlg.RemoteUrl)
+					if (remote.FetchUrl != dlg.RemoteUrl)
 						repo.ChangeRemoteUrl (remote.Name, dlg.RemoteUrl);
 					if (remote.PushUrl != dlg.RemotePushUrl)
 						repo.ChangeRemotePushUrl (remote.Name, dlg.RemotePushUrl);

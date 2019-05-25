@@ -1,7 +1,7 @@
 <ExtensionModel>
  
 	<Runtime>
-		<Import assembly="LibGit2Sharp.dll"/>
+		<Import assembly="Microsoft.Alm.GitProcessManagement.dll"/>
 		<Import file="GitIgnore.txt" />
 	</Runtime>
 

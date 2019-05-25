@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoDevelop.VersionControl.Git</RootNamespace>
     <AssemblyName>MonoDevelop.VersionControl.Git</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -141,11 +141,9 @@
     <Compile Include="gtk-gui\MonoDevelop.VersionControl.Git.EditRemoteDialog.cs" />
     <Compile Include="gtk-gui\MonoDevelop.VersionControl.Git.MergeDialog.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\MergeDialog.cs" />
-    <Compile Include="MonoDevelop.VersionControl.Git\Stash.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\GitUtil.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\CredentialsDialog.cs" />
     <Compile Include="gtk-gui\MonoDevelop.VersionControl.Git.CredentialsDialog.cs" />
-    <Compile Include="MonoDevelop.VersionControl.Git\GitCredentials.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\GitOptionsPanelWidget.cs" />
     <Compile Include="gtk-gui\MonoDevelop.VersionControl.Git.GitOptionsPanelWidget.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\GitOptionsPanel.cs" />
@@ -161,7 +159,7 @@
     <Compile Include="MonoDevelop.VersionControl.Git\GitSelectRevisionDialog.cs" />
     <Compile Include="AddinInfo.cs" />
     <Compile Include="MonoDevelop.VersionControl.Git\ProjectTemplateHandler.cs" />
-    <Compile Include="MonoDevelop.VersionControl.Git\TfsSmartSubtransport.cs" />
+    <Compile Include="MonoDevelop.VersionControl.Git\CompatExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\Mono.Texteditor\Mono.TextEditor.csproj">
@@ -194,14 +192,14 @@
       <Name>Mono.Addins</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\external\GitProgressManagement\Microsoft.Alm.GitProcessManagement\Src\Microsoft.Alm.GitProgressManagement.csproj">
-      <Project>{19770407-9D75-4081-B8E7-7F0DA1DBD161}</Project>
-      <Name>Microsoft.Alm.GitProcessManagement</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\external\nrefactory\ICSharpCode.NRefactory\ICSharpCode.NRefactory.csproj">
       <Project>{3B2A5653-EC97-4001-BB9B-D90F1AF2C371}</Project>
       <Name>ICSharpCode.NRefactory</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\external\GitProgressManagement\Microsoft.Alm.GitProcessManagement\Src\Microsoft.Alm.GitProcessManagement.csproj">
+      <Project>{19770407-9D75-4081-B8E7-7F0DA1DBD161}</Project>
+      <Name>Microsoft.Alm.GitProcessManagement</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
